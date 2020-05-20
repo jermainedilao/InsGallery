@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 
+import androidx.core.content.ContextCompat;
+
 import com.luck.picture.lib.PictureSelectionModel;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.R;
@@ -21,7 +23,7 @@ import com.luck.picture.lib.style.PictureWindowAnimationStyle;
 
 import java.util.List;
 
-import androidx.core.content.ContextCompat;
+import static com.luck.picture.lib.config.PictureSelectionConfig.imageEngine;
 
 /**
  * ================================================
@@ -49,16 +51,27 @@ public final class InsGallery {
     }
 
     public static void openGallery(Activity activity, ImageEngine engine, OnResultCallbackListener listener) {
-        openGallery(activity, engine, null, null, listener);
+        openGallery(activity, engine, null, null, listener, 3, false, false); // CUSTOM REQUIREMENT
     }
 
     public static void openGallery(Activity activity, ImageEngine engine, CacheResourcesEngine cacheResourcesEngine, OnResultCallbackListener listener) {
-        openGallery(activity, engine, cacheResourcesEngine, null, listener);
+        openGallery(activity, engine, cacheResourcesEngine, null, listener, 3, false, false); // CUSTOM REQUIREMENT
     }
 
-    public static void openGallery(Activity activity, ImageEngine engine, CacheResourcesEngine cacheResourcesEngine, List<LocalMedia> selectionMedia, OnResultCallbackListener listener) {
+    public static void openGallery(
+        Activity activity,
+        ImageEngine engine,
+        CacheResourcesEngine cacheResourcesEngine,
+        List<LocalMedia> selectionMedia,
+        OnResultCallbackListener listener,
+        int maxSelection, // CUSTOM REQUIREMENT,
+        boolean singleSelection, // CUSTOM REQUIREMENT, USED IN COMMENTS,
+        boolean isDefaultCamera
+    ) {
         applyInstagramOptions(activity.getApplicationContext(), PictureSelector.create(activity)
-                .openGallery(PictureMimeType.ofAll()))// 全部.PictureMimeType.ofAll()、图片.ofImage()、视频.ofVideo()、音频.ofAudio()
+                .openGallery(PictureMimeType.ofImage()), maxSelection)// 全部.PictureMimeType.ofAll()、图片.ofImage()、视频.ofVideo()、音频.ofAudio() // CUSTOM REQUIREMENT
+                .selectionMode(singleSelection ? PictureConfig.SINGLE : PictureConfig.MULTIPLE)
+                .isDefaultCamera(isDefaultCamera)
                 .imageEngine(engine)// 外部传入图片加载引擎，必传项
                 .loadCacheResourcesCallback(cacheResourcesEngine)// 获取图片资源缓存，主要是解决华为10部分机型在拷贝文件过多时会出现卡的问题，这里可以判断只在会出现一直转圈问题机型上使用
                 .selectionData(selectionMedia)// 是否传入已选图片
@@ -67,7 +80,7 @@ public final class InsGallery {
 
     public static void openGallery(Activity activity, ImageEngine engine, CacheResourcesEngine cacheResourcesEngine, List<LocalMedia> selectionMedia) {
         applyInstagramOptions(activity.getApplicationContext(), PictureSelector.create(activity)
-                .openGallery(PictureMimeType.ofAll()))// 全部.PictureMimeType.ofAll()、图片.ofImage()、视频.ofVideo()、音频.ofAudio()
+                .openGallery(PictureMimeType.ofAll()), 3)// 全部.PictureMimeType.ofAll()、图片.ofImage()、视频.ofVideo()、音频.ofAudio() // CUSTOM REQUIREMENT
                 .imageEngine(engine)// 外部传入图片加载引擎，必传项
                 .loadCacheResourcesCallback(cacheResourcesEngine)// 获取图片资源缓存，主要是解决华为10部分机型在拷贝文件过多时会出现卡的问题，这里可以判断只在会出现一直转圈问题机型上使用
                 .selectionData(selectionMedia)// 是否传入已选图片
@@ -76,7 +89,7 @@ public final class InsGallery {
 
     public static void openGallery(Activity activity, ImageEngine engine, CacheResourcesEngine cacheResourcesEngine, List<LocalMedia> selectionMedia, int requestCode) {
         applyInstagramOptions(activity.getApplicationContext(), PictureSelector.create(activity)
-                .openGallery(PictureMimeType.ofAll()))// 全部.PictureMimeType.ofAll()、图片.ofImage()、视频.ofVideo()、音频.ofAudio()
+                .openGallery(PictureMimeType.ofAll()), 3)// 全部.PictureMimeType.ofAll()、图片.ofImage()、视频.ofVideo()、音频.ofAudio() // CUSTOM REQUIREMENT
                 .imageEngine(engine)// 外部传入图片加载引擎，必传项
                 .loadCacheResourcesCallback(cacheResourcesEngine)// 获取图片资源缓存，主要是解决华为10部分机型在拷贝文件过多时会出现卡的问题，这里可以判断只在会出现一直转圈问题机型上使用
                 .selectionData(selectionMedia)// 是否传入已选图片
@@ -84,14 +97,14 @@ public final class InsGallery {
     }
 
     @SuppressLint("SourceLockedOrientationActivity")
-    public static PictureSelectionModel applyInstagramOptions(Context context, PictureSelectionModel selectionModel) {
+    public static PictureSelectionModel applyInstagramOptions(Context context, PictureSelectionModel selectionModel, int maxSelection) { // CUSTOM REQUIREMENT
         return selectionModel
                 .setInstagramConfig(InstagramSelectionConfig.createConfig().setCurrentTheme(currentTheme))
                 .setPictureStyle(createInstagramStyle(context))// 动态自定义相册主题
                 .setPictureCropStyle(createInstagramCropStyle(context))// 动态自定义裁剪主题
                 .setPictureWindowAnimationStyle(new PictureWindowAnimationStyle())// 自定义相册启动退出动画
                 .isWithVideoImage(false)// 图片和视频是否可以同选,只在ofAll模式下有效
-                .maxSelectNum(9)// 最大图片选择数量
+                .maxSelectNum(maxSelection) // CUSTOM REQUIREMENT
                 .minSelectNum(1)// 最小选择数量
                 .maxVideoSelectNum(1) // 视频最大选择数量，如果没有单独设置的需求则可以不设置，同用maxSelectNum字段
                 //.minVideoSelectNum(1)// 视频最小选择数量，如果没有单独设置的需求则可以不设置，同用minSelectNum字段
@@ -111,7 +124,8 @@ public final class InsGallery {
                 .isZoomAnim(true)// 图片列表点击 缩放效果 默认true
                 //.imageFormat(PictureMimeType.PNG)// 拍照保存图片格式后缀,默认jpeg
                 .isEnableCrop(true)// 是否裁剪
-                //.basicUCropConfig()//对外提供所有UCropOptions参数配制，但如果PictureSelector原本支持设置的还是会使用原有的设置
+                .cropImageWideHigh(750, 750) // CUSTOM REQUIREMENT
+                //.basicUCropConfig()//对外提供所有UCroPictureSelectorInstagramStyleActivitypOptions参数配制，但如果PictureSelector原本支持设置的还是会使用原有的设置
                 .isCompress(false)// 是否压缩
                 //.compressQuality(80)// 图片压缩后输出质量 0~ 100
                 .synOrAsy(true)//同步true或异步false 压缩 默认同步
@@ -120,7 +134,7 @@ public final class InsGallery {
                 .withAspectRatio(1, 1)// 裁剪比例 如16:9 3:2 3:4 1:1 可自定义
                 .showCropFrame(true)// 是否显示裁剪矩形边框 圆形裁剪时建议设为false
                 .showCropGrid(true)// 是否显示裁剪矩形网格 圆形裁剪时建议设为false
-                .isOpenClickSound(true)// 是否开启点击声音
+                .isOpenClickSound(false) // CUSTOM REQUIREMENT
                 //.isDragFrame(false)// 是否可拖动裁剪框(固定)
                 //.videoMinSecond(10)
                 .videoMaxSecond(120)

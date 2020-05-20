@@ -1,13 +1,13 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion cfgs.compileSdkVersion
+    compileSdkVersion 29
 
     defaultConfig {
-        minSdkVersion cfgs.minSdkVersion
-        targetSdkVersion cfgs.targetSdkVersion
-        versionCode cfgs.versionCode
-        versionName cfgs.versionName
+        minSdkVersion 19
+        targetSdkVersion 29
+        versionCode 3
+        versionName "0.1.7"
     }
 
     compileOptions {
@@ -29,14 +29,16 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation "androidx.appcompat:appcompat:${cfgs.version_appcompat}"
-    implementation "androidx.recyclerview:recyclerview:${cfgs.version_recyclerview}"
-    implementation "androidx.concurrent:concurrent-futures:${cfgs.futures_version}"
-    implementation "com.squareup.okio:okio:${cfgs.okio_version}"
-    implementation "androidx.camera:camera-lifecycle:${cfgs.camerax_version}"
-    implementation "androidx.localbroadcastmanager:localbroadcastmanager:${cfgs.localbroadcastmanager}"
-    implementation "androidx.camera:camera-view:${cfgs.camerax_view}"
+    //noinspection GradleCompatible
+    implementation "androidx.appcompat:appcompat:1.1.0"
+    //noinspection GradleCompatible
+    implementation "androidx.recyclerview:recyclerview:1.1.0"
+    implementation "androidx.concurrent:concurrent-futures:1.0.0"
+    implementation "com.squareup.okio:okio:2.6.0"
+    implementation "androidx.localbroadcastmanager:localbroadcastmanager:1.0.0"
+    implementation "androidx.camera:camera-lifecycle:1.0.0-beta03"
+    implementation "androidx.camera:camera-view:1.0.0-alpha10"
+    api "androidx.camera:camera-core:1.0.0-beta03"
+    api "androidx.camera:camera-camera2:1.0.0-beta03"
     api project(':ucrop')
 }
-
-apply from: 'bintray.gradle'

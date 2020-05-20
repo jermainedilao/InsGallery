@@ -4,6 +4,9 @@ import android.content.pm.ActivityInfo;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.annotation.ColorInt;
+import androidx.annotation.StyleRes;
+
 import com.luck.picture.lib.R;
 import com.luck.picture.lib.camera.CustomCameraView;
 import com.luck.picture.lib.engine.CacheResourcesEngine;
@@ -19,9 +22,6 @@ import com.luck.picture.lib.style.PictureWindowAnimationStyle;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import androidx.annotation.ColorInt;
-import androidx.annotation.StyleRes;
 
 /**
  * @author：luck
@@ -158,6 +158,9 @@ public final class PictureSelectionConfig implements Parcelable {
     public boolean isFallbackVersion;
     public boolean isFallbackVersion2;
     public boolean isFallbackVersion3;
+    public boolean isCameraOnly = false;
+    public boolean isGalleryOnly = false;
+    public boolean isDefaultCamera = false;
 
     protected void initDefaultValue() {
         chooseMode = PictureMimeType.ofImage();
@@ -263,6 +266,9 @@ public final class PictureSelectionConfig implements Parcelable {
         isAndroidQChangeWH = true;
         isAndroidQChangeVideoWH = false;
         isQuickCapture = true;
+        isCameraOnly = false;
+        isGalleryOnly = false;
+        isDefaultCamera = false;
     }
 
     public static PictureSelectionConfig getInstance() {

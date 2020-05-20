@@ -21,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.VideoView;
 
 import com.luck.picture.lib.R;
+import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.config.PictureSelectionConfig;
 import com.luck.picture.lib.entity.LocalMedia;
@@ -105,6 +106,7 @@ public class InstagramPreviewContainer extends FrameLayout {
     };
     private AnimatorSet mAnimatorSet;
     private ObjectAnimator mPlayAnimator;
+    private boolean isSingleSelection;
 
     public InstagramPreviewContainer(@NonNull Context context, PictureSelectionConfig config) {
         super(context);
@@ -194,7 +196,8 @@ public class InstagramPreviewContainer extends FrameLayout {
                 context.getResources().getDrawable(R.drawable.discover_telescopic).mutate());
         ratiodDrawable.setCustomSize(ScreenUtils.dip2px(context, 30), ScreenUtils.dip2px(context, 30));
 
-        mRatioView.setImageDrawable(ratiodDrawable);
+        // We don't need this
+        // mRatioView.setImageDrawable(ratiodDrawable);
         FrameLayout.LayoutParams ratioLayoutParams = new LayoutParams(ScreenUtils.dip2px(context, 30), ScreenUtils.dip2px(context, 30), Gravity.BOTTOM | Gravity.LEFT);
         ratioLayoutParams.leftMargin = ScreenUtils.dip2px(context, 15);
         ratioLayoutParams.bottomMargin = ScreenUtils.dip2px(context, 12);
@@ -211,28 +214,31 @@ public class InstagramPreviewContainer extends FrameLayout {
             }
         });
 
-        mMultiView = new ImageView(context);
+        if (config.selectionMode != PictureConfig.SINGLE) {
+            // Only add multiview if it's not single selection.
+            mMultiView = new ImageView(context);
 
-        CombinedDrawable multiDrawable = new CombinedDrawable(InstagramUtils.createSimpleSelectorCircleDrawable(ScreenUtils.dip2px(context, 30), 0x88000000, Color.BLACK),
+            CombinedDrawable multiDrawable = new CombinedDrawable(InstagramUtils.createSimpleSelectorCircleDrawable(ScreenUtils.dip2px(context, 30), 0x88000000, Color.BLACK),
                 context.getResources().getDrawable(R.drawable.discover_many).mutate());
-        multiDrawable.setCustomSize(ScreenUtils.dip2px(context, 30), ScreenUtils.dip2px(context, 30));
+            multiDrawable.setCustomSize(ScreenUtils.dip2px(context, 30), ScreenUtils.dip2px(context, 30));
 
-        mMultiView.setImageDrawable(multiDrawable);
-        FrameLayout.LayoutParams multiLayoutParams = new LayoutParams(ScreenUtils.dip2px(context, 30), ScreenUtils.dip2px(context, 30), Gravity.BOTTOM | Gravity.RIGHT);
-        multiLayoutParams.rightMargin = ScreenUtils.dip2px(context, 15);
-        multiLayoutParams.bottomMargin = ScreenUtils.dip2px(context, 12);
-        addView(mMultiView, multiLayoutParams);
-        mMultiView.setOnClickListener(v -> {
-            isMulti = !isMulti;
-            if (isMulti) {
-                mRatioView.setVisibility(View.GONE);
-            } else {
-                mRatioView.setVisibility(View.VISIBLE);
-            }
-            if (mListener != null) {
-                mListener.onSelectionModeChange(isMulti);
-            }
-        });
+            mMultiView.setImageDrawable(multiDrawable);
+            FrameLayout.LayoutParams multiLayoutParams = new LayoutParams(ScreenUtils.dip2px(context, 30), ScreenUtils.dip2px(context, 30), Gravity.BOTTOM | Gravity.RIGHT);
+            multiLayoutParams.rightMargin = ScreenUtils.dip2px(context, 15);
+            multiLayoutParams.bottomMargin = ScreenUtils.dip2px(context, 12);
+            addView(mMultiView, multiLayoutParams);
+            mMultiView.setOnClickListener(v -> {
+                isMulti = !isMulti;
+                if (isMulti) {
+                    mRatioView.setVisibility(View.GONE);
+                } else {
+                    mRatioView.setVisibility(View.VISIBLE);
+                }
+                if (mListener != null) {
+                    mListener.onSelectionModeChange(isMulti);
+                }
+            });
+        }
 
         View divider = new View(getContext());
         if (config.instagramSelectionConfig.getCurrentTheme() == InsGallery.THEME_STYLE_DARK) {

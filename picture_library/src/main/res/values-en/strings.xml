@@ -59,7 +59,7 @@
     <string name="picture_photo_pictures">Take Picture</string>
     <string name="picture_photo_recording">Long Press Camera</string>
     <string name="picture_go_setting">Go Setting</string>
-    <string name="gallery">gallery</string>
+    <string name="gallery">Gallery</string>
     <string name="photo">Photo</string>
     <string name="video">Video</string>
     <string name="press_to_record">Press and hold to record.</string>
@@ -67,7 +67,7 @@
     <string name="camera_access">Enable camera access</string>
     <string name="camera_access_content">Allow access to take photos and videos.</string>
     <string name="enable">Enable</string>
-    <string name="done">done</string>
+    <string name="done">Done</string>
     <string name="camera_init">Camera is initializing...</string>
     <string name="picture_know">I know the</string>
     <string name="picture_data_null">There no data here…</string>

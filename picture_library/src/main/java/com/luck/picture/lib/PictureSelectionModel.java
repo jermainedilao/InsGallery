@@ -5,6 +5,12 @@ import android.content.Intent;
 import android.os.Build;
 
 import com.luck.picture.lib.animators.AnimationType;
+import androidx.annotation.ColorInt;
+import androidx.annotation.FloatRange;
+import androidx.annotation.IntRange;
+import androidx.annotation.StyleRes;
+import androidx.fragment.app.Fragment;
+
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
 import com.luck.picture.lib.config.PictureSelectionConfig;
@@ -1209,6 +1215,30 @@ public class PictureSelectionModel {
      */
     public PictureSelectionModel isFallbackVersion3(boolean isFallbackVersion) {
         selectionConfig.isFallbackVersion3 = isFallbackVersion;
+        return this;
+    }
+
+    /**
+     * If should only show camera.
+     */
+    public PictureSelectionModel isCameraOnly(boolean isCameraOnly) {
+        selectionConfig.isCameraOnly = isCameraOnly;
+        return this;
+    }
+
+    /**
+     * If should only show gallery.
+     */
+    public PictureSelectionModel isGalleryOnly(boolean isGalleryOnly) {
+        selectionConfig.isGalleryOnly = isGalleryOnly;
+        return this;
+    }
+
+    /**
+     * If should show camera as default.
+     */
+    public PictureSelectionModel isDefaultCamera(boolean isDefaultCamera) {
+        selectionConfig.isDefaultCamera = isDefaultCamera;
         return this;
     }
 

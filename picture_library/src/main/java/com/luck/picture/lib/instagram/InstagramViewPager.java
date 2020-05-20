@@ -12,12 +12,12 @@ import android.view.animation.AccelerateInterpolator;
 import android.widget.FrameLayout;
 
 import com.luck.picture.lib.config.PictureSelectionConfig;
+import androidx.annotation.NonNull;
+
 import com.luck.picture.lib.tools.ScreenUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import androidx.annotation.NonNull;
 
 /**
  * ================================================
@@ -270,7 +270,7 @@ public class InstagramViewPager extends FrameLayout {
         }
         mAnimatorSet = new AnimatorSet();
         mAnimatorSet.playTogether(
-                ObjectAnimator.ofFloat(this, "scrollHorizontalPosition", scrollHorizontalPosition, destination));
+            ObjectAnimator.ofFloat(this, "scrollHorizontalPosition", scrollHorizontalPosition, destination));
         mAnimatorSet.setInterpolator(Interpolator);
         mAnimatorSet.setDuration(duration);
         mAnimatorSet.start();

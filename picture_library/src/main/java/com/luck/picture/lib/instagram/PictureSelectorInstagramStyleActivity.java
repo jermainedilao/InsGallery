@@ -229,39 +229,50 @@ public class PictureSelectorInstagramStyleActivity extends PictureBaseActivity i
         params.addRule(RelativeLayout.BELOW, R.id.titleViewBg);
 
         mList = new ArrayList<>();
-        mList.add(new PageGallery(mInstagramGallery));
-        PagePhoto pagePhoto = new PagePhoto(this, config);
-        mList.add(pagePhoto);
-        mList.add(new PageVideo(pagePhoto));
+        PagePhoto pagePhoto = null;
+
+//        if (config.isGalleryOnly) {
+//            mList.add(new PageGallery(mInstagramGallery));
+//        } else if (config.isCameraOnly) {
+//            pagePhoto = new PagePhoto(this, config);
+//            mList.add(pagePhoto);
+//        } else {
+            mList.add(new PageGallery(mInstagramGallery));
+            pagePhoto = new PagePhoto(this, config);
+            mList.add(pagePhoto);
+//        }
+        // mList.add(new PageVideo(pagePhoto)); // CUSTOM REQUIREMENT
         mInstagramViewPager = new InstagramViewPager(getContext(), mList, config);
         ((RelativeLayout) container).addView(mInstagramViewPager, params);
 
-        pagePhoto.setCameraListener(new CameraListener() {
-            @Override
-            public void onPictureSuccess(@NonNull File file) {
-                Intent intent = new Intent();
-                intent.putExtra(PictureConfig.EXTRA_MEDIA_PATH, file.getAbsolutePath());
-                requestCamera(intent);
-            }
-
-            @Override
-            public void onRecordSuccess(@NonNull File file) {
-                Intent intent = new Intent();
-                intent.putExtra(PictureConfig.EXTRA_MEDIA_PATH, file.getAbsolutePath());
-                requestCamera(intent);
-            }
-
-            @Override
-            public void onError(int videoCaptureError, String message, Throwable cause) {
-                if (videoCaptureError == -1) {
-                    onTakePhoto();
-                } else {
-                    ToastUtils.s(getContext(), message);
+//        if (pagePhoto != null) {
+            pagePhoto.setCameraListener(new CameraListener() {
+                @Override
+                public void onPictureSuccess(@NonNull File file) {
+                    Intent intent = new Intent();
+                    intent.putExtra(PictureConfig.EXTRA_MEDIA_PATH, file.getAbsolutePath());
+                    requestCamera(intent);
                 }
-            }
-        });
 
-        mInstagramViewPager.setSkipRange(1);
+                @Override
+                public void onRecordSuccess(@NonNull File file) {
+                    Intent intent = new Intent();
+                    intent.putExtra(PictureConfig.EXTRA_MEDIA_PATH, file.getAbsolutePath());
+                    requestCamera(intent);
+                }
+
+                @Override
+                public void onError(int videoCaptureError, String message, Throwable cause) {
+                    if (videoCaptureError == -1) {
+                        onTakePhoto();
+                    } else {
+                        ToastUtils.s(getContext(), message);
+                    }
+                }
+            });
+//        }
+
+        // mInstagramViewPager.setSkipRange(1); // CUSTOM REQUIREMENT
         mInstagramViewPager.setOnPageChangeListener(new OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -296,6 +307,11 @@ public class PictureSelectorInstagramStyleActivity extends PictureBaseActivity i
                 }
             }
         });
+
+        if (config.isDefaultCamera) {
+            mInstagramViewPager
+                .post(() -> mInstagramViewPager.selectPagePosition(1));
+        }
 
         mTvEmpty = mInstagramGallery.getEmptyView();
         isNumComplete(numComplete);
