@@ -106,9 +106,8 @@ public class InstagramPreviewContainer extends FrameLayout {
     };
     private AnimatorSet mAnimatorSet;
     private ObjectAnimator mPlayAnimator;
-    private boolean isSingleSelection;
 
-    public InstagramPreviewContainer(@NonNull Context context, PictureSelectionConfig config) {
+    public InstagramPreviewContainer(@NonNull Context context, PictureSelectionConfig config) {  // CUSTOM REQUIREMENT
         super(context);
         this.config = config;
         mHandler = new Handler(context.getMainLooper());

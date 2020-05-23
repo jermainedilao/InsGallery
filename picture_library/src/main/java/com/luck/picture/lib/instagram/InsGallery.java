@@ -23,8 +23,6 @@ import com.luck.picture.lib.style.PictureWindowAnimationStyle;
 
 import java.util.List;
 
-import static com.luck.picture.lib.config.PictureSelectionConfig.imageEngine;
-
 /**
  * ================================================
  * 此类只是作为 InsGallery 的快捷入口, 帮助开发者快速上手,
@@ -119,7 +117,7 @@ public final class InsGallery {
                 //.querySpecifiedFormatSuffix(PictureMimeType.ofJPEG())// 查询指定后缀格式资源
                 .enablePreviewAudio(false) // 是否可播放音频
                 .isCamera(false)// 是否显示拍照按钮
-                //.isMultipleSkipCrop(false)// 多图裁剪时是否支持跳过，默认支持
+                .isMultipleSkipCrop(false)// 多图裁剪时是否支持跳过，默认支持
                 //.isMultipleRecyclerAnimation(false)// 多图裁剪底部列表显示动画效果
                 .isZoomAnim(true)// 图片列表点击 缩放效果 默认true
                 //.imageFormat(PictureMimeType.PNG)// 拍照保存图片格式后缀,默认jpeg

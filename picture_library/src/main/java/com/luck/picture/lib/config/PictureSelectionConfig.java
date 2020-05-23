@@ -210,7 +210,7 @@ public final class PictureSelectionConfig implements Parcelable {
         enableCrop = false;
         isWeChatStyle = false;
         isUseCustomCamera = false;
-        isMultipleSkipCrop = true;
+        isMultipleSkipCrop = false;  // CUSTOM REQUIREMENT. ALWAYS FORCE CROPPING BY DEFAULT.
         isMultipleRecyclerAnimation = true;
         freeStyleCropEnabled = false;
         circleDimmedLayer = false;

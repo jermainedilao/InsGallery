@@ -65,6 +65,7 @@ import androidx.appcompat.app.AppCompatActivity;
  * @describe: BaseActivity
  */
 public abstract class PictureBaseActivity extends AppCompatActivity {
+
     protected PictureSelectionConfig config;
     protected boolean openWhiteStatusBar, numComplete;
     protected int colorPrimary, colorPrimaryDark;
